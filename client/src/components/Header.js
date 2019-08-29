@@ -53,10 +53,11 @@ const styles = theme => ({
 		flexGrow: 1,
 		display: 'flex',
 		alignItems: 'center',
+		color: '#fff',
 	},
 	icon: {
 		marginRight: theme.spacing.unit,
-		color: 'green',
+		color: '#fff',
 		fontSize: 45,
 	},
 	mobile: {
