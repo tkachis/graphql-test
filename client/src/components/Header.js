@@ -6,6 +6,7 @@ import MapIcon from '@material-ui/icons/Map'
 import Typography from '@material-ui/core/Typography'
 
 import Context from '../context'
+import Signout from './Auth/Signout'
 
 const Header = ({ classes: { root, grow, icon, img } }) => {
 	const {
@@ -37,6 +38,7 @@ const Header = ({ classes: { root, grow, icon, img } }) => {
 					)}
 
 					{/* Signout Button */}
+					<Signout />
 				</Toolbar>
 			</AppBar>
 		</div>

@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
 import Context from '../../context'
+import { LOGIN_USER, IS_LOGGED_IN } from '../../constants'
 import { ME_QUERY } from '../../graphql/queries'
 
 const Login = ({ classes }) => {
@@ -17,8 +18,8 @@ const Login = ({ classes }) => {
 				headers: { authorization: idToken },
 			})
 			const { me } = await client.request(ME_QUERY)
-			dispatch({ type: 'LOGIN_USER', payload: me })
-			dispatch({ type: 'IS_LOGGED_IN', payload: googleUser.isSignedIn() })
+			dispatch({ type: LOGIN_USER, payload: me })
+			dispatch({ type: IS_LOGGED_IN, payload: googleUser.isSignedIn() })
 		} catch (err) {
 			onFailure(err)
 		}
