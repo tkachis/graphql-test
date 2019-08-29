@@ -6,6 +6,8 @@ import { withStyles } from '@material-ui/core/styles'
 // import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
 
 import PinIcon from './Pin/PinIcon'
+import Blog from './Blog'
+
 import Context from '../context'
 import { CREATE_DRAFT, UPDATE_DRAFT_LOCATION } from '../constants'
 
@@ -82,7 +84,7 @@ const Map = ({
 						offsetLeft={-19}
 						offsetTop={-37}
 					>
-						<PinIcon size={40} color="orange" />
+						<PinIcon size={40} color="primary" />
 					</Marker>
 				)}
 
@@ -94,10 +96,13 @@ const Map = ({
 						offsetLeft={-19}
 						offsetTop={-37}
 					>
-						<PinIcon size={40} color="indigo" />
+						<PinIcon size={40} color="secondary" />
 					</Marker>
 				)}
 			</ReactMapGL>
+
+			{/* Blog Area to add Pin Content */}
+			<Blog />
 		</div>
 	)
 }
