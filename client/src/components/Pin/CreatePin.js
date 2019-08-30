@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import axios from 'axios'
+import { GraphQLClient } from 'graphql-request'
 import { withStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
@@ -11,6 +12,7 @@ import SaveIcon from '@material-ui/icons/SaveTwoTone'
 
 import Context from '../../context'
 import { DELETE_DRAFT } from '../../constants'
+import { CREATE_PIN_MUTATION } from '../../graphql/mutations'
 
 const CreatePin = ({
 	classes: {
@@ -24,13 +26,20 @@ const CreatePin = ({
 		button,
 	},
 }) => {
-	const { dispatch } = useContext(Context)
+	const {
+		state: {
+			draft: { latitude, longitude },
+		},
+		dispatch,
+	} = useContext(Context)
 
 	const [content, setContent] = useState({
 		title: '',
 		image: '',
 		text: '',
 	})
+
+	const [submitting, setSubmitting] = useState(false)
 
 	const { title, image, text } = content
 
@@ -51,9 +60,37 @@ const CreatePin = ({
 	}
 
 	const handleSubmit = async e => {
-		e.preventDefault()
-		const url = await handleImageUpload()
-		console.log(url)
+		try {
+			e.preventDefault()
+
+			const url = await handleImageUpload()
+
+			const idToken = window.gapi.auth2
+				.getAuthInstance()
+				.currentUser.get()
+				.getAuthResponse().id_token
+
+			const client = new GraphQLClient('http://localhost:5000/graphql', {
+				headers: { authorization: idToken },
+			})
+
+			const { createPin } = await client.request(CREATE_PIN_MUTATION, {
+				title,
+				image: url,
+				content: text,
+				latitude,
+				longitude,
+			})
+
+			console.log(createPin)
+
+			setSubmitting(true)
+
+			handleDeleteDraft()
+		} catch (err) {
+			setSubmitting(false)
+			console.error('Error create pin', err)
+		}
 	}
 
 	const handleDeleteDraft = () => {
@@ -128,7 +165,7 @@ const CreatePin = ({
 					className={button}
 					variant="contained"
 					color="primary"
-					disabled={!title.trim() || !text.trim() || !image}
+					disabled={!title.trim() || !text.trim() || !image || submitting}
 					onClick={handleSubmit}
 				>
 					Submit
