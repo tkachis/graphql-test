@@ -4,6 +4,7 @@ import {
 	SIGNOUT_USER,
 	CREATE_DRAFT,
 	UPDATE_DRAFT_LOCATION,
+	DELETE_DRAFT,
 } from './constants'
 
 export default function reducer(state, { type, payload }) {
@@ -36,6 +37,11 @@ export default function reducer(state, { type, payload }) {
 			return {
 				...state,
 				draft: payload,
+			}
+		case DELETE_DRAFT:
+			return {
+				...state,
+				draft: null,
 			}
 		default:
 			return state
