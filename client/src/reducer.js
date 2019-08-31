@@ -8,6 +8,7 @@ import {
 	GET_PINS,
 	CREATE_PIN,
 	SET_PIN,
+	DELETE_PIN,
 } from './constants'
 
 export default function reducer(state, { type, payload }) {
@@ -64,6 +65,14 @@ export default function reducer(state, { type, payload }) {
 				...state,
 				currentPin: payload,
 				draft: null,
+			}
+		case DELETE_PIN:
+			const deletedPin = payload
+			const filteredPins = state.pins.filter(pin => pin._id !== deletedPin._id)
+			return {
+				...state,
+				pins: [...filteredPins],
+				currentPin: null,
 			}
 		default:
 			return state
