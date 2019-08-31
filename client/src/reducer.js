@@ -7,6 +7,7 @@ import {
 	DELETE_DRAFT,
 	GET_PINS,
 	CREATE_PIN,
+	SET_PIN,
 } from './constants'
 
 export default function reducer(state, { type, payload }) {
@@ -30,6 +31,7 @@ export default function reducer(state, { type, payload }) {
 		case CREATE_DRAFT:
 			return {
 				...state,
+				currentPin: null,
 				draft: {
 					latitude: 0,
 					longitude: 0,
@@ -56,6 +58,12 @@ export default function reducer(state, { type, payload }) {
 			return {
 				...state,
 				pins: [...prevPins, newPin],
+			}
+		case SET_PIN:
+			return {
+				...state,
+				currentPin: payload,
+				draft: null,
 			}
 		default:
 			return state
