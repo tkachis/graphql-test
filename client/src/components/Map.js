@@ -8,8 +8,11 @@ import { withStyles } from '@material-ui/core/styles'
 import PinIcon from './Pin/PinIcon'
 import Blog from './Blog'
 
+import { useClient } from '../client'
+import { GET_PINS_QUERY } from '../graphql/queries'
+
 import Context from '../context'
-import { CREATE_DRAFT, UPDATE_DRAFT_LOCATION } from '../constants'
+import { CREATE_DRAFT, UPDATE_DRAFT_LOCATION, GET_PINS } from '../constants'
 
 const Map = ({
 	classes: {
@@ -26,17 +29,24 @@ const Map = ({
 		longitude: 30.3162,
 		zoom: 13,
 	})
-
 	const [userPosition, setUserPosition] = useState(null)
 
 	const {
-		state: { draft },
+		state: { draft, pins },
 		dispatch,
 	} = useContext(Context)
 
+	const client = useClient()
+
 	useEffect(() => {
 		getUserPosition()
+		getPins()
 	}, [])
+
+	const getPins = async () => {
+		const { getPins } = await client.request(GET_PINS_QUERY)
+		dispatch({ type: GET_PINS, payload: getPins })
+	}
 
 	const getUserPosition = () => {
 		if ('geolocation' in navigator) {
@@ -99,6 +109,20 @@ const Map = ({
 						<PinIcon size={40} color="secondary" />
 					</Marker>
 				)}
+
+				{/* Created Pins */}
+				{pins.length > 0 &&
+					pins.map(pin => (
+						<Marker
+							key={pin._id}
+							latitude={pin.latitude}
+							longitude={pin.longitude}
+							offsetLeft={-19}
+							offsetTop={-37}
+						>
+							<PinIcon size={40} color="secondary" />
+						</Marker>
+					))}
 			</ReactMapGL>
 
 			{/* Blog Area to add Pin Content */}
