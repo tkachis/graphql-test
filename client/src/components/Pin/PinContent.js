@@ -15,23 +15,17 @@ const PinContent = ({ classes: { root, icon, text, picture } }) => {
 
 	return (
 		<div className={root}>
-			<Typography className={text} component="h3" variant="h6" gutterButtom>
+			<Typography className={text} component="h3" variant="h6">
 				<img src={author.picture} alt={author.name} className={picture} />
 				{author.name}
 			</Typography>
-			<Typography
-				component="h2"
-				variant="h4"
-				color="primary"
-				className={text}
-				gutterButtom
-			>
+			<Typography component="h2" variant="h4" color="primary" className={text}>
 				{title}
 			</Typography>
-			<Typography variant="subtitle1" className={text} gutterButtom>
+			<Typography variant="subtitle1" className={text}>
 				{content}
 			</Typography>
-			<Typography className={text} variant="subtitle2" gutterButtom>
+			<Typography className={text} variant="subtitle2">
 				<AccessTimeIcon className={icon} />
 				{format(Number(createdAt), 'MMM Do, YYYY')}
 			</Typography>
