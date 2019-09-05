@@ -1,5 +1,7 @@
 import React, { useContext } from 'react'
+
 import { withStyles } from '@material-ui/core/styles'
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import MapIcon from '@material-ui/icons/Map'
@@ -8,7 +10,9 @@ import Typography from '@material-ui/core/Typography'
 import Context from '../context'
 import Signout from './Auth/Signout'
 
-const Header = ({ classes: { root, grow, icon, img } }) => {
+const Header = ({ classes: { root, grow, icon, img, mobile } }) => {
+	const mobileSize = useMediaQuery('(max-width: 650px)')
+
 	const {
 		state: { currentUser },
 	} = useContext(Context)
@@ -22,7 +26,13 @@ const Header = ({ classes: { root, grow, icon, img } }) => {
 					{/* Title / Logo */}
 					<div className={grow}>
 						<MapIcon className={icon} />
-						<Typography component="h1" variant="h6" color="inherit" noWrap>
+						<Typography
+							className={mobileSize ? mobile : ''}
+							component="h1"
+							variant="h6"
+							color="inherit"
+							noWrap
+						>
 							GeoPins
 						</Typography>
 					</div>
@@ -31,7 +41,12 @@ const Header = ({ classes: { root, grow, icon, img } }) => {
 					{currentUser && (
 						<div className={grow}>
 							<img className={img} src={picture} alt={name} />
-							<Typography variant="h5" color="inherit" noWrap>
+							<Typography
+								className={mobileSize ? mobile : ''}
+								variant="h5"
+								color="inherit"
+								noWrap
+							>
 								{name}
 							</Typography>
 						</div>

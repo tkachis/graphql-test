@@ -3,6 +3,7 @@ import ReactMapGL, { NavigationControl, Marker, Popup } from 'react-map-gl'
 import { Subscription } from 'react-apollo'
 
 import { withStyles } from '@material-ui/core/styles'
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import DeleteIcon from '@material-ui/icons/DeleteTwoTone'
@@ -40,6 +41,10 @@ const Map = ({
 		popupTab,
 	},
 }) => {
+	const client = useClient()
+
+	const mobileSize = useMediaQuery('(max-width: 650px)')
+
 	const [viewport, setViewport] = useState({
 		latitude: 59.9387,
 		longitude: 30.3162,
@@ -52,8 +57,6 @@ const Map = ({
 		state: { draft, pins, currentUser },
 		dispatch,
 	} = useContext(Context)
-
-	const client = useClient()
 
 	useEffect(() => {
 		getUserPosition()
@@ -103,12 +106,13 @@ const Map = ({
 	const isAuthUser = () => currentUser._id === popup.author._id
 
 	return (
-		<div className={root}>
+		<div className={mobileSize ? rootMobile : root}>
 			<ReactMapGL
 				width="100vw"
 				height="calc(100vh - 64px)"
 				mapStyle="mapbox://styles/mapbox/dark-v9"
 				mapboxApiAccessToken="pk.eyJ1IjoidGthY2hpcyIsImEiOiJjanp1ODNhbmUwN3ZpM21sMjk0cm1hZmszIn0.c7IbXwBZGCrhXas_UMmWXg"
+				scrollZoom={!mobileSize}
 				onViewportChange={newViewport => setViewport(newViewport)}
 				onClick={handleMapClick}
 				{...viewport}
