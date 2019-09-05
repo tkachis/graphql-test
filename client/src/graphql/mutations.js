@@ -17,6 +17,7 @@ export const CREATE_PIN_MUTATION = `
             author {
                 _id
                 name
+                email
                 picture
             }
         }

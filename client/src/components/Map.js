@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import ReactMapGL, { NavigationControl, Marker, Popup } from 'react-map-gl'
+import { Subscription } from 'react-apollo'
+
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
@@ -11,6 +13,11 @@ import Blog from './Blog'
 import { useClient } from '../client'
 import { GET_PINS_QUERY } from '../graphql/queries'
 import { DELETE_PIN_MUTATION } from '../graphql/mutations'
+import {
+	PIN_ADDED_SUBSCRIPTION,
+	PIN_UPDATED_SUBSCRIPTION,
+	PIN_DELETED_SUBSCRIPTION,
+} from '../graphql/subscriptions'
 
 import Context from '../context'
 import {
@@ -19,6 +26,8 @@ import {
 	GET_PINS,
 	SET_PIN,
 	DELETE_PIN,
+	CREATE_PIN,
+	CREATE_COMMENT,
 } from '../constants'
 
 const Map = ({
@@ -84,10 +93,10 @@ const Map = ({
 	}
 
 	const handleDeletePin = async () => {
-		const { deletePin } = await client.request(DELETE_PIN_MUTATION, {
+		await client.request(DELETE_PIN_MUTATION, {
 			pinId: popup._id,
 		})
-		dispatch({ type: DELETE_PIN, payload: deletePin })
+
 		setPopup(null)
 	}
 
@@ -174,6 +183,34 @@ const Map = ({
 					</Popup>
 				)}
 			</ReactMapGL>
+
+			{/* Subscriptions for Creating | Updating | Deleting Pins */}
+			<Subscription
+				subscription={PIN_ADDED_SUBSCRIPTION}
+				onSubscriptionData={({ subscriptionData }) => {
+					const { pinAdded } = subscriptionData.data
+					console.log({ pinAdded })
+					dispatch({ type: CREATE_PIN, payload: pinAdded })
+				}}
+			/>
+
+			<Subscription
+				subscription={PIN_UPDATED_SUBSCRIPTION}
+				onSubscriptionData={({ subscriptionData }) => {
+					const { pinUpdated } = subscriptionData.data
+					console.log({ pinUpdated })
+					dispatch({ type: CREATE_COMMENT, payload: pinUpdated })
+				}}
+			/>
+
+			<Subscription
+				subscription={PIN_DELETED_SUBSCRIPTION}
+				onSubscriptionData={({ subscriptionData }) => {
+					const { pinDeleted } = subscriptionData.data
+					console.log({ pinDeleted })
+					dispatch({ type: DELETE_PIN, payload: pinDeleted })
+				}}
+			/>
 
 			{/* Blog Area to add Pin Content */}
 			<Blog />

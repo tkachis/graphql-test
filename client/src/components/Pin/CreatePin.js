@@ -12,7 +12,7 @@ import SaveIcon from '@material-ui/icons/SaveTwoTone'
 
 import { useClient } from '../../client'
 import Context from '../../context'
-import { DELETE_DRAFT, CREATE_PIN } from '../../constants'
+import { DELETE_DRAFT } from '../../constants'
 import { CREATE_PIN_MUTATION } from '../../graphql/mutations'
 
 const CreatePin = ({
@@ -61,15 +61,13 @@ const CreatePin = ({
 			e.preventDefault()
 			setSubmitting(true)
 			const url = await handleImageUpload()
-			const { createPin } = await client.request(CREATE_PIN_MUTATION, {
+			await client.request(CREATE_PIN_MUTATION, {
 				title,
 				image: url,
 				content: text,
 				latitude,
 				longitude,
 			})
-
-			dispatch({ type: CREATE_PIN, payload: createPin })
 
 			handleDeleteDraft()
 		} catch (err) {

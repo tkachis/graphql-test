@@ -9,7 +9,6 @@ import Divider from '@material-ui/core/Divider'
 import { useClient } from '../../client'
 import { CREATE_COMMENT_MUTATION } from '../../graphql/mutations'
 import Context from '../../context'
-import { CREATE_COMMENT } from '../../constants'
 
 const CreateComment = ({
 	classes: { form, input, clearButton, sendButton },
@@ -17,21 +16,13 @@ const CreateComment = ({
 	const client = useClient()
 	const {
 		state: { currentPin },
-		dispatch,
 	} = useContext(Context)
 	const [comment, setComment] = useState('')
 
 	const handleSubmitComment = async () => {
-		const { createComment } = await client.request(CREATE_COMMENT_MUTATION, {
+		await client.request(CREATE_COMMENT_MUTATION, {
 			pinId: currentPin._id,
 			text: comment,
-		})
-
-		console.log(createComment)
-
-		dispatch({
-			type: CREATE_COMMENT,
-			payload: createComment,
 		})
 
 		setComment('')
