@@ -38,6 +38,6 @@ mongoose
 	.then(() => console.log('MongoDB connected...'))
 	.catch(err => console.error(err))
 
-server.listen(PORT).then(({ url }) => {
+server.listen({ port: PORT }).then(({ url }) => {
 	console.log(`Server listening on ${url}`)
 })

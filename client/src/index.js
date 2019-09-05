@@ -16,7 +16,10 @@ import reducer from './reducer'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 const wsLink = new WebSocketLink({
-	uri: 'ws://localhost:5000/graphql',
+	uri:
+		process.env.NODE_ENV === 'production'
+			? 'wss://graphqlgeo.herokuapp.com/graphql'
+			: 'ws://localhost:5000/graphql',
 	options: {
 		reconnect: true,
 	},

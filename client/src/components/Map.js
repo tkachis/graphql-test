@@ -45,23 +45,31 @@ const Map = ({
 
 	const mobileSize = useMediaQuery('(max-width: 650px)')
 
+	const {
+		state: { draft, pins, currentUser },
+		dispatch,
+	} = useContext(Context)
+
 	const [viewport, setViewport] = useState({
 		latitude: 59.9387,
 		longitude: 30.3162,
 		zoom: 13,
 	})
 	const [userPosition, setUserPosition] = useState(null)
-	const [popup, setPopup] = useState(null)
-
-	const {
-		state: { draft, pins, currentUser },
-		dispatch,
-	} = useContext(Context)
 
 	useEffect(() => {
 		getUserPosition()
 		getPins()
 	}, [])
+
+	const [popup, setPopup] = useState(null)
+
+	useEffect(() => {
+		const pinExists = popup && pins.findIndex(pin => pin._id === popup._id) > -1
+		if (!pinExists) {
+			setPopup(null)
+		}
+	}, [pins.lenght])
 
 	const getPins = async () => {
 		const { getPins } = await client.request(GET_PINS_QUERY)
