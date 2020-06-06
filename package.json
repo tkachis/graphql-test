@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^2.3.1",
+    "apollo-server": "^2.14.2",
     "concurrently": "^4.1.2",
     "dotenv": "^6.2.0",
     "google-auth-library": "^3.0.1",
